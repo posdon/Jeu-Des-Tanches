@@ -46,6 +46,8 @@ public class Map {
         spawnPosByTeam = new Position[nbPlayer][];
     }
 
+    /* Getters and setters */
+    
     public String getId() {
         return id;
     }
@@ -89,10 +91,46 @@ public class Map {
 			throw new OutOfRangeException(team+" isn't a team for Map "+id+" in setSpawnPosByTeam");
 		}
     }
+    
+    /* Boolean functions */
+    
+    public boolean isOccupied(Position t){
+    	return grid.isOccupied(t);
+    }
+    
+    public boolean isOccupiedBy(Position t, Entity e){
+    	if(grid.isOnGrid(e)){
+    		return t.equals(grid.getPos(e));
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public boolean isOccupiedBy(Entity e, Position t){
+    	if(grid.isOnGrid(e)){
+    		return t.equals(grid.getPos(e));
+    	}else{
+    		return false;
+    	}
+    }
+    
+    
+    /* Add, move and remove functions */
 
     public void addEntity(Entity e, Position p) throws NullEntityException, OutOfRangeException{
     	if(e!=null){
-    		grid.add(e, p);
+    		if(grid.isOccupied(p) && e.isSolid()){
+    			if(grid.getOn(p).isSolid()){
+    				// Case : Both entity are solid
+    				//TODO
+    			}else{
+    				// Case : Non-solid entity on p
+    				grid.add(e, p);
+    			}
+    		}else{
+    			// Case : Non-solid e or empty p
+        		grid.add(e, p);
+    		}
     	}else{
     		throw new NullEntityException(e+" is null in addEntity");
     	}
@@ -115,7 +153,7 @@ public class Map {
     	if(grid.isOccupied(p)){
     		grid.clear(p);
     	}else{
-    		throw new NullEntityException("No entity on "+p+" in removeEntity(Position)");
+    		throw new NullEntityException("No entity on "+p+" in removeEntity (Entity)");
     	}
     }
 
@@ -124,15 +162,59 @@ public class Map {
     		if(grid.isOnGrid(e)){
     			grid.delete(e);
     		}else{
-    			throw new NullEntityException(e+" isn't on grid in removeEntity(Entity)");
+    			throw new NullEntityException(e+" isn't on grid in removeEntity (Entity)");
     		}
     	}else{
     		throw new NullEntityException(e+" is null in removeEntity");
     	}
     }
 
-    public void moveEntityLeft(Entity e){
-    	//TODO all the move Entity
+    public void moveEntityLeft(Entity e) throws NullEntityException, OutOfRangeException{
+    	if(e!=null){
+    		if(grid.isOnGrid(e)){
+    			grid.moveLeft(e);
+    		}else{
+    			throw new NullEntityException(e+" isn't on grid in moveEntityLeft (Entity)");
+    		}
+    	}else{
+    		throw new NullEntityException("No entity in moveEntityLeft (Entity)");
+    	}
+    }
+    
+    public void moveEntityUp(Entity e) throws NullEntityException, OutOfRangeException{
+    	if(e!=null){
+    		if(grid.isOnGrid(e)){
+    			grid.moveUp(e);
+    		}else{
+    			throw new NullEntityException(e+" isn't on grid in moveEntityUp (Entity)");
+    		}
+    	}else{
+    		throw new NullEntityException("No entity in moveEntityUp (Entity)");
+    	}
+    }
+    
+    public void moveEntityDown(Entity e) throws NullEntityException, OutOfRangeException{
+    	if(e!=null){
+    		if(grid.isOnGrid(e)){
+    			grid.moveDown(e);
+    		}else{
+    			throw new NullEntityException(e+" isn't on grid in moveEntityDown (Entity)");
+    		}
+    	}else{
+    		throw new NullEntityException("No entity in moveEntityDown (Entity)");
+    	}
+    }
+    
+    public void moveEntityRight(Entity e) throws NullEntityException, OutOfRangeException{
+    	if(e!=null){
+    		if(grid.isOnGrid(e)){
+    			grid.moveRight(e);
+    		}else{
+    			throw new NullEntityException(e+" isn't on grid in moveEntityRight (Entity)");
+    		}
+    	}else{
+    		throw new NullEntityException("No entity in moveEntityRight (Entity)");
+    	}
     }
 
 }

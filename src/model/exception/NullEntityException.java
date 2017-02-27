@@ -2,7 +2,13 @@ package model.exception;
 
 public class NullEntityException extends Exception {
 
+	private String message="";
+	
 	public NullEntityException(String m){
-		System.out.println("NullEntityException : "+m);
+		message="NullEntityException : "+m;
+	}
+	
+	public String message(){
+		return message;
 	}
 }

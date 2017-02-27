@@ -33,12 +33,12 @@ public class MapTest {
 		try{
 			m.addEntity(null, p1);
 		}catch(NullEntityException e){
-			assert(e.getMessage().contains("addEntity"));
+			assertTrue(e.message().contains("addEntity"));
 		}
 		try{
 			m.addEntity(e, badPos);
 		}catch(OutOfRangeException e){
-			assert(e.getMessage().contains("add (Grid Template)"));
+			assertTrue(e.message().contains("add (Grid Template)"));
 		}
 	}
 
@@ -48,18 +48,53 @@ public class MapTest {
 		try{
 			m.removeEntity(p2);
 		}catch(NullEntityException e){
-			assert(e.getMessage().contains("remove"));
+			assertTrue(e.message().contains("remove"));
 		}
 		try{
 			m.removeEntity(p1);	
 		}catch(NullEntityException e){
-			assert(e.getMessage().contains("remove"));
+			assertTrue(e.message().contains("remove"));
 		}
 
 	}
 
 	@Test
-	public void moveEntityTest(){
-		//TODO
+	public void moveEntityTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		m.moveEntity(e, p2);
+		assertFalse(m.isOccupiedBy(e, p1));
+		assertTrue(m.isOccupiedBy(e, p2));
+	}
+	
+	@Test
+	public void moveEntityLeftTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		m.moveEntityLeft(e);
+		assertFalse(m.isOccupiedBy(e, p1));
+		assertTrue(m.isOccupiedBy(e, new Position(0,1)));
+	}
+	
+	@Test
+	public void moveEntityUpTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		m.moveEntityUp(e);
+		assertFalse(m.isOccupiedBy(e, p1));
+		assertTrue(m.isOccupiedBy(e, new Position(1,0)));
+	}
+	
+	@Test
+	public void moveEntityDownTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		m.moveEntityDown(e);
+		assertFalse(m.isOccupiedBy(e, p1));
+		assertTrue(m.isOccupiedBy(e, new Position(1,2)));
+	}
+	
+	@Test
+	public void moveEntityRightTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		m.moveEntityRight(e);
+		assertFalse(m.isOccupiedBy(e, p1));
+		assertTrue(m.isOccupiedBy(e, new Position(2,1)));
 	}
 }

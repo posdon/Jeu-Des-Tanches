@@ -1,7 +1,9 @@
 package model.helper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import model.exception.OutOfRangeException;
@@ -56,15 +58,17 @@ public class Grid<T> {
 		return (grid.containsKey(t))? grid.get(t) : new Position();
 	}
 
-	public T getOn(Position p){
+	public List<T> getOn(Position p){
 		if(grid.containsValue(p)){
 			Iterator<T> itT = grid.keySet().iterator();
+			List<T> listT = new ArrayList<T>();
 			while(itT.hasNext()){
 				T currT = itT.next();
 				if(grid.get(currT).equals(p)){
-					return currT;
+					listT.add(currT);
 				}
 			}
+			return listT;
 		}
 		return null;
 	}
@@ -77,9 +81,19 @@ public class Grid<T> {
 		return grid.containsValue(p);
 	}
 
-	public void add(T t, Position p) throws OutOfRangeException {
+	/**
+	 * Add t at position p
+	 * If eraseAll = true, suppress all T on p before adding t
+	 * @param t
+	 * @param p
+	 * @param eraseAll
+	 * @throws OutOfRangeException
+	 */
+	public void add(T t, Position p, boolean eraseAll) throws OutOfRangeException {
 		if(p.getX()>=0&&p.getX()<xMax&&p.getY()>=0&&p.getY()<yMax){
-			clear(p);
+			if(eraseAll){
+				clear(p);
+			}
 			grid.put(t, p);
 		}else{
 			throw new OutOfRangeException("out of limit in add (Grid Template)");
@@ -104,70 +118,70 @@ public class Grid<T> {
 		grid.clear();
 	}
 
-	public void moveDown(T t) throws OutOfRangeException{
+	public void moveDown(T t, boolean eraseAll) throws OutOfRangeException{
 		if(grid.containsKey(t)){
 			Position oldP = grid.get(t);
 			if(oldP.getY()<yMax-1){
-				add(t, new Position(oldP.getX(),oldP.getY()+1));
+				add(t, new Position(oldP.getX(),oldP.getY()+1), eraseAll);
 			}
 		}
 	}
 
-	public void moveRight(T t) throws OutOfRangeException{
+	public void moveRight(T t, boolean eraseAll) throws OutOfRangeException{
 		if(grid.containsKey(t)){
 			Position oldP = grid.get(t);
 			if(oldP.getX()<xMax-1){
-				add(t, new Position(oldP.getX()+1,oldP.getY()));
+				add(t, new Position(oldP.getX()+1,oldP.getY()), eraseAll);
 			}
 		}
 	}
 
-	public void moveUp(T t) throws OutOfRangeException{
+	public void moveUp(T t, boolean eraseAll) throws OutOfRangeException{
 		if(grid.containsKey(t)){
 			Position oldP = new Position(grid.get(t));
 			if(oldP.getY()>0){
-				add(t, new Position(oldP.getX(), oldP.getY()-1));
+				add(t, new Position(oldP.getX(), oldP.getY()-1), eraseAll);
 			}
 		}
 	}
 
-	public void moveLeft(T t) throws OutOfRangeException{
+	public void moveLeft(T t, boolean eraseAll) throws OutOfRangeException{
 		if(grid.containsKey(t)){
 			Position oldP = grid.get(t);
 			if(oldP.getX()>0){
-				add(t, new Position(oldP.getX()-1, oldP.getY()));
+				add(t, new Position(oldP.getX()-1, oldP.getY()), eraseAll);
 			}
 		}
 	}
 
-	public void moveDown(Position p) throws OutOfRangeException{
-		if(grid.containsValue(p)){
+	public void moveDown(T t, Position p, boolean eraseAll) throws OutOfRangeException{
+		if(grid.containsKey(t)&&grid.get(t).equals(p)){
 			if(p.getY()<yMax-1){
-				add(getOn(p), new Position(p.getX(),p.getY()+1));
+				add(t, new Position(p.getX(),p.getY()+1), eraseAll);
 			}
 		}
 	}
 
-	public void moveRight(Position p) throws OutOfRangeException{
-		if(grid.containsValue(p)){
+	public void moveRight(T t, Position p, boolean eraseAll) throws OutOfRangeException{
+		if(grid.containsKey(t)&&grid.get(t).equals(p)){
 			if(p.getX()<xMax-1){
-				add(getOn(p), new Position(p.getX()+1,p.getY()));
+				add(t, new Position(p.getX()+1,p.getY()), eraseAll);
 			}
 		}
 	}
 
-	public void moveUp(Position p) throws OutOfRangeException{
-		if(grid.containsValue(p)){
+	public void moveUp(T t, Position p, boolean eraseAll) throws OutOfRangeException{
+		if(grid.containsKey(t)&&grid.get(t).equals(p)){
 			if(p.getY()>0){
-				add(getOn(p), new Position(p.getX(),p.getY()-1));
+				add(t, new Position(p.getX(),p.getY()-1), eraseAll);
 			}
 		}
 	}
 
-	public void moveLeft(Position p) throws OutOfRangeException{
-		if(grid.containsValue(p)){
+	public void moveLeft(T t, Position p, boolean eraseAll) throws OutOfRangeException{
+		if(grid.containsKey(t)&&grid.get(t).equals(p)){
 			if(p.getX()>0){
-				add(getOn(p), new Position(p.getX()-1,p.getY()));
+				add(t, new Position(p.getX()-1,p.getY()), eraseAll);
 			}
 		}
 	}
