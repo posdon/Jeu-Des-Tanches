@@ -43,9 +43,19 @@ public class MapTest {
 	}
 
 	@Test
-	public void removeEntityTest(){
+	public void removeEntityTest() throws NullEntityException, OutOfRangeException{
+		m.addEntity(e, p1);
+		try{
+			m.removeEntity(p2);
+		}catch(NullEntityException e){
+			assert(e.getMessage().contains("remove"));
+		}
+		try{
+			m.removeEntity(p1);	
+		}catch(NullEntityException e){
+			assert(e.getMessage().contains("remove"));
+		}
 
-		//TODO
 	}
 
 	@Test
